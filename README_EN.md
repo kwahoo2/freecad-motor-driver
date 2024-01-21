@@ -68,7 +68,7 @@ Motor 2 enabled: 1, Angle: 1.99813
 
 ![Main Window][mw]
 
-[mw]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/master/.github/images/mw_en.png "Main Window"
+[mw]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/mw_en.png "Main Window"
 
 ## Connecting DRV8825 drivers
 Pinout for 3 drivers is defined in `pigpio_driver.cpp`:
@@ -105,5 +105,5 @@ After rotating the object, you should see the _Transf Angle_ attribute change an
 
 ![Single Observer][so]
 
-[so]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/master/.github/images/single_observer.png "Observer"
+[so]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/single_observer.png "Observer"
 

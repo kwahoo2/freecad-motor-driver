@@ -69,7 +69,7 @@ Motor 2 enabled: 1, Angle: 1.99813
 
 ![Main Window][mw]
 
-[mw]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/master/.github/images/mw_pl.png "Main Window"
+[mw]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/mw_pl.png "Main Window"
 
 ## Podłączenie sterowników DRV8825
 Pinout dla 3 sterowników jest zdefiniowany w `pigpio_driver.cpp`:
@@ -107,4 +107,4 @@ W podobny sposób możesz dodać dwa kolejne obiekty.
 
 ![Single Observer][so]
 
-[so]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/master/.github/images/single_observer.png "Observer"
+[so]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/single_observer.png "Observer"
