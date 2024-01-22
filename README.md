@@ -1,5 +1,7 @@
 # FreeCAD stepper motors driver
 
+[![MotorObservers in FreeCAD](https://img.youtube.com/vi/pOclEe01pYs/0.jpg)](https://youtu.be/pOclEe01pYs)
+
 ## English
 
 The goal of the project is to show how stepper motors can be controlled directly from FreeCAD.

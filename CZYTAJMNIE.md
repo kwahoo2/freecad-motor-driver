@@ -25,7 +25,7 @@ By uruchomić sterować silnikami krokowymi z poziomu programu FreeCAD potrzebne
 Zawartość repozytorium podzielona jest na 3 części, znajdujące się w poniższych katalogach:
 
 * motor-observer - skrypt Pythona, który służy do tworzenia obiektów "MotorObserver" w FreeCAD-zie i monitorowania ich ruchu.
-* udp-receiver - program dla Raspberry Pi, który odbiera dane wejściowe z `motor-oberver.py` i steruje silnikami krokowymi
+* udp-receiver - program dla Raspberry Pi, który odbiera dane wejściowe z `motor-observer.py` i steruje silnikami krokowymi
 * deltarobot-example - przykład modelu robota delta zbudowanego w zintergrowanym środowisku złożeń programu FreeCAD/Ondsel ES
 
 ### Uruchomienie przykładu
@@ -108,3 +108,7 @@ W podobny sposób możesz dodać dwa kolejne obiekty.
 ![Single Observer][so]
 
 [so]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/single_observer.png "Observer"
+
+## Zapisanie skryptu jako makra
+
+Aby uniknać każdorazowego wklejania treści skryptu do konsoli FreeCAD można zapisać go jako makro. Konieczne jest jednak, w opcjach _Python->Makrodefinicje_ odnaczenie opcji _Uruchom makro w środowisku lokalnym_ by konsola Pythona w programie FreeCAD miała dostęp do funkcji tego makra. Makro musi być uruchamiane przed załadowaniem pliku zawierającego obiekty _MotorObserver._

@@ -24,10 +24,10 @@ To start controlling stepper motors from FreeCAD, you need:
 The content of the repository is divided into 3 parts, located in the following directories:
 
 * motor-observer - a Python script that is used to create "MotorObserver" objects in FreeCAD and monitor their movement.
-* udp-receiver - a program for Raspberry Pi that receives input from `motor-oberver.py` and controls the stepper motors.
+* udp-receiver - a program for Raspberry Pi that receives input from `motor-observer.py` and controls the stepper motors.
 * deltarobot-example - an example of a delta robot model built in FreeCAD/Ondsel ES's integrated assembly environment.
 
-### Running the example.
+### Running the example
 
 * Download the contents of the repository:
 
@@ -107,3 +107,6 @@ After rotating the object, you should see the _Transf Angle_ attribute change an
 
 [so]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/single_observer.png "Observer"
 
+## Saving the script as a macro
+
+To avoid pasting the contents of the script into the FreeCAD console each time, you can save it as a macro. It is necessary to uncheck the _Run macros in local environment_ option in the _Python->Macros_ options in order of the Python console having access to the functions of this macro. The macro must be executed before loading a file containing _MotorObserver_ objects.
