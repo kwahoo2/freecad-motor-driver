@@ -150,7 +150,7 @@ def record_states(enabled, reset = True, send_and_rec = True):
     global recording_enabled, immediate_send_enabled
     recording_enabled = enabled
     immediate_send_enabled = send_and_rec
-    if reset:
+    if enabled and reset:
         recorded_states.clear()
     App.Console.PrintMessage("Recording states: " + str(recording_enabled) + "Current number: " + str(len(recorded_states)) + "\n")
 

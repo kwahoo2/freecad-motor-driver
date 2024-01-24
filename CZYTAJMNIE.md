@@ -71,6 +71,9 @@ Motor 2 enabled: 1, Angle: 1.99813
 
 [mw]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/mw_pl.png "Main Window"
 
+Zamknięcie połączenia UDP może zostać wykonane przez wpisanie w konsoli Pythona:
+`sock.close`
+
 ## Podłączenie sterowników DRV8825
 Pinout dla 3 sterowników jest zdefiniowany w `pigpio_driver.cpp`:
 
@@ -112,3 +115,28 @@ W podobny sposób możesz dodać dwa kolejne obiekty.
 ## Zapisanie skryptu jako makra
 
 Aby uniknać każdorazowego wklejania treści skryptu do konsoli FreeCAD można zapisać go jako makro. Konieczne jest jednak, w opcjach _Python->Makrodefinicje_ odnaczenie opcji _Uruchom makro w środowisku lokalnym_ by konsola Pythona w programie FreeCAD miała dostęp do funkcji tego makra. Makro musi być uruchamiane przed załadowaniem pliku zawierającego obiekty _MotorObserver._
+
+## Nagrywanie i odtwarzanie ruchów
+
+Rozpoczęcie nagrywania stanów (czy silnik włączony, kąt obrotu silnika):
+
+`record_states(True) # rozpoczęcie nagrywania w domyślnym trybie po usunięciu wcześniej zapisanych stanów (domyślne) z jednoczesnym wysyłaniem danych przez UDP (domyślne)`
+
+`record_states(True, False) # rozpoczęcie nagrywania z dołączeniem nowych stanów do wcześniej zapisanych z jednoczesnym wysyłaniem danych przez UDP (domyślne)`
+
+`record_states(True, False, False) # rozpoczęcie nagrywania z dołączeniem nowych stanów do wcześniej zapisanych, ale bez natychmiastowego wysyłania danych przez UDP`
+
+`record_states(False) # zakończenie nagrywania`
+
+Wysyłanie nagranych stanów przez UDP:
+
+`replay_states() # wysyłanie z domyślnym interwałem, co 100 ms`
+
+`replay_states(500) # wysyłanie z interwałem co 500 ms`
+
+Stany są zapisywane w tablicy Pythona _recorded_states_:
+
+`recorded_states`
+
+`[[[True, 14.547610262696343], [True, 13.868117217586773], [True, 3.6937013788423902]] ... [[True, 14.91649298466781], [True, 14.686913526099675], [True, 3.752842724113009]]]`
+

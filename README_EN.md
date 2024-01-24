@@ -70,6 +70,9 @@ Motor 2 enabled: 1, Angle: 1.99813
 
 [mw]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/mw_en.png "Main Window"
 
+Closing a UDP connection can be done by typing in the Python console:
+`sock.close`
+
 ## Connecting DRV8825 drivers
 Pinout for 3 drivers is defined in `pigpio_driver.cpp`:
 
@@ -110,3 +113,27 @@ After rotating the object, you should see the _Transf Angle_ attribute change an
 ## Saving the script as a macro
 
 To avoid pasting the contents of the script into the FreeCAD console each time, you can save it as a macro. It is necessary to uncheck the _Run macros in local environment_ option in the _Python->Macros_ options in order of the Python console having access to the functions of this macro. The macro must be executed before loading a file containing _MotorObserver_ objects.
+
+## Motion recording and playback
+
+Start recording states (motor enabled or not, motor rotation angle):
+
+`record_states(True) # start recording in default mode after deleting previously saved states (default) with simultaneous sending of data via UDP (default)`
+
+`record_states(True, False) # start recording with appending new states to previously saved states, and with simultaneous sending of data via UDP (default)`.
+
+`record_states(True, False, False) # start recording with appending new states to previously stored states, but without immediately sending data via UDP`.
+
+`record_states(False) # stop recording`
+
+Sending recorded states via UDP:
+
+`replay_states() # sending with default interval, every 100 ms`
+
+`replay_states(500) # sending with an interval every 500 ms`
+
+The states are stored in Python's _recorded_states_ array:
+
+`recorded_states`
+
+`[[[True, 14.547610262696343], [True, 13.868117217586773], [True, 3.6937013788423902]] ... [[True, 14.91649298466781], [True, 14.686913526099675], [True, 3.752842724113009]]]`
