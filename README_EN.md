@@ -71,7 +71,8 @@ Motor 2 enabled: 1, Angle: 1.99813
 [mw]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/mw_en.png "Main Window"
 
 Closing a UDP connection can be done by typing in the Python console:
-`sock.close`
+
+`sock.close()`
 
 ## Connecting DRV8825 drivers
 Pinout for 3 drivers is defined in `pigpio_driver.cpp`:
@@ -120,9 +121,9 @@ Start recording states (motor enabled or not, motor rotation angle):
 
 `record_states(True) # start recording in default mode after deleting previously saved states (default) with simultaneous sending of data via UDP (default)`
 
-`record_states(True, False) # start recording with appending new states to previously saved states, and with simultaneous sending of data via UDP (default)`.
+`record_states(True, False) # start recording with appending new states to previously saved states, and with simultaneous sending of data via UDP (default)`
 
-`record_states(True, False, False) # start recording with appending new states to previously stored states, but without immediately sending data via UDP`.
+`record_states(True, False, False) # start recording with appending new states to previously stored states, but without immediately sending data via UDP`
 
 `record_states(False) # stop recording`
 

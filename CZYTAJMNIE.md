@@ -72,7 +72,8 @@ Motor 2 enabled: 1, Angle: 1.99813
 [mw]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/mw_pl.png "Main Window"
 
 Zamknięcie połączenia UDP może zostać wykonane przez wpisanie w konsoli Pythona:
-`sock.close`
+
+`sock.close()`
 
 ## Podłączenie sterowników DRV8825
 Pinout dla 3 sterowników jest zdefiniowany w `pigpio_driver.cpp`:
