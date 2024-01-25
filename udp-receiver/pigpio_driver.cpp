@@ -24,13 +24,15 @@
 #include <pigpio.h>
 #include "pigpio_driver.h"
 
-static const int enablPin0 = 4; // GPIO 4, physical pin 7
-static const int enablPin1 = 20; // GPIO 20, physical pin 38
+static const int enablPin0 = 5; // GPIO 5, physical pin 29
+static const int dirPin0 = 6; // GPIO 6, physical pin 31
+static const int stepPin0 = 13; // GPIO 13, physical pin 33
+
+static const int enablPin1 = 16; // GPIO 16, physical pin 36
+static const int dirPin1 = 20; // GPIO 20, physical pin 38
+static const int stepPin1 = 21; // GPIO 21, physical pin 40
+
 static const int enablPin2 = 17; // GPIO 17, physical pin 11
-static const int dirPin0 = 5; // GPIO 5, physical pin 29
-static const int stepPin0 = 6; // GPIO 6, physical pin 31
-static const int dirPin1 = 12; // GPIO 12, physical pin 32
-static const int stepPin1 = 26; // GPIO 26, physical pin 37
 static const int dirPin2 = 27; // GPIO 27, physical pin 13
 static const int stepPin2 = 22; // GPIO 22, physical pin 15
 
