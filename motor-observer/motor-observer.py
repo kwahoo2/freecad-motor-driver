@@ -38,6 +38,7 @@ immediate_send_enabled = True
 class MotorObserver:
     def __init__(self, obj):
         '''"App two point properties" '''
+        obj.addProperty("App::PropertyLink","SupportObject","MotorObserver","Support for observer placement")
         obj.addProperty("App::PropertyPlacement","BasePlacement","MotorObserver","Base Placement")
         obj.addProperty("App::PropertyAngle","TransfAngle","MotorObserver","Angle of Transformation")
         obj.addProperty("App::PropertyBool","Enabled","MotorObserver","Enable the motor").Enabled = True
@@ -48,6 +49,9 @@ class MotorObserver:
         self.last_state = []
 
     def onChanged(self, fp, prop):
+        if (prop == "SupportObject"):
+            print (fp.SupportObject)
+
         if (prop == "Placement") or (prop == "Enabled"):
             fp.recompute()
             enbl = fp.Enabled
@@ -66,6 +70,9 @@ class MotorObserver:
         auto_set_base_pl = True
         pl = fp.Placement
         base_pl = fp.BasePlacement
+        if (fp.SupportObject):
+            support_pl = fp.SupportObject.Placement
+            base_pl = support_pl * base_pl
         transf_pl = base_pl.inverse() * pl # calculate how much placement is transformed from initial placement
         axis = transf_pl.Rotation.Axis
         angle = transf_pl.Rotation.Angle
@@ -101,7 +108,10 @@ def create_observer():
 def set_base_pl(): #set base placement, used to calculate diff angle
     observers = App.ActiveDocument.findObjects(Label="MotorObserver")
     for obs in observers:
-        obs.BasePlacement = obs.Placement
+        if obs.SupportObject:
+            obs.BasePlacement = obs.Placement * obs.SupportObject.Placement
+        else:
+            obs.BasePlacement = obs.Placement
         obs.recompute()
 
 timer_sender = QtCore.QTimer()
