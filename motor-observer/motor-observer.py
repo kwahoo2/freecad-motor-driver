@@ -91,7 +91,10 @@ class MotorObserver:
                 App.Console.PrintMessage("Base placement adjusted automatically\n")
             return
         fp.TransfAngle = str (angle) + 'rad'
-        fp.Shape = Part.makeBox(10.0, 7.0, 3.0)
+        w = 10
+        l = 7
+        h = 3
+        fp.Shape = Part.makeBox(w, l, h, App.Vector(-w / 2, -l / 2, -h / 2))
 
 # above class must be defined (pasted in the interpreter) before opening a file with motorobserver addObject
 # otherwise will throw pyException: <string>(2)<class 'AttributeError'>: Module __main__ has no class MotorObserver
