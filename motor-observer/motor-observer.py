@@ -50,7 +50,7 @@ class MotorObserver:
 
     def onChanged(self, fp, prop):
         if (prop == "SupportObject"):
-            App.Console.PrintMessage(str(fp.SupportObject) + "\n")
+            App.Console.PrintMessage(str(fp.Label) + " Support: " + str(fp.SupportObject.Label) + "\n")
 
         if (prop == "Placement") or (prop == "Enabled"):
             fp.recompute()
