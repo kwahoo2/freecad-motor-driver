@@ -48,7 +48,7 @@ def update_pose():
                 timer_pose.start()
             else:
                 end_of_data = True
-                App.Console.PrintMessage("Enf of data at row: " + str(row_idx) + " ending\n")
+                App.Console.PrintMessage("End of data at row: " + str(row_idx) + " ending\n")
 
 timer_pose.timeout.connect(update_pose)
 timer_pose.start()

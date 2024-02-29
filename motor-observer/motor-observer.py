@@ -39,7 +39,7 @@ class MotorObserver:
     def __init__(self, obj):
         '''"App two point properties" '''
         obj.addProperty("App::PropertyLink","SupportObject","MotorObserver","Support for observer placement")
-        obj.addProperty("App::PropertyPlacement","BasePlacement","MotorObserver","Base Placement")
+        obj.addProperty("App::PropertyRotation","BaseRotation","MotorObserver","Base Rotation")
         obj.addProperty("App::PropertyAngle","TransfAngle","MotorObserver","Angle of Transformation")
         obj.addProperty("App::PropertyBool","Enabled","MotorObserver","Enable the motor").Enabled = True
         obj.addProperty("App::PropertyBool","Reversed","MotorObserver","Reverse motor direction").Reversed = False
@@ -50,7 +50,7 @@ class MotorObserver:
 
     def onChanged(self, fp, prop):
         if (prop == "SupportObject"):
-            print (fp.SupportObject)
+            App.Console.PrintMessage(str(fp.SupportObject) + "\n")
 
         if (prop == "Placement") or (prop == "Enabled"):
             fp.recompute()
@@ -58,24 +58,27 @@ class MotorObserver:
             angle = fp.TransfAngle.Value
             state = [bool(enbl), float(angle)]
             if (self.last_state == state):
-                print("State not changed, pass")
+                App.Console.PrintMessage("State not changed, pass\n")
             else:
                 try:
                     trigger_sender()
                 except:
-                    print("No send_states() function defined!")
+                    App.Console.PrintMessage("No send_states() function defined!\n")
 
     def execute(self, fp):
-        '''"Print a short message when doing a recomputation, this method is mandatory" '''
-        auto_set_base_pl = True
-        pl = fp.Placement
-        base_pl = fp.BasePlacement
+        auto_set_base_pl = False
+        rot = fp.Placement.Rotation
+        base_rot = fp.BaseRotation
+        # if the observer is moving in 3D space it need a support object specified
+        # eg.: if observer is fixed to a motor pulley, the motor housing can used as a support object
+        # an user can set the support in the data tab inside FreeCAD window
         if (fp.SupportObject):
-            support_pl = fp.SupportObject.Placement
-            base_pl = support_pl * base_pl
-        transf_pl = base_pl.inverse() * pl # calculate how much placement is transformed from initial placement
-        axis = transf_pl.Rotation.Axis
-        angle = transf_pl.Rotation.Angle
+            support_rot = fp.SupportObject.Placement.Rotation
+            transf_rot = base_rot.inverted() * support_rot.inverted() * rot
+        else:
+            transf_rot = base_rot.inverted() * rot # calculate how much rotation is transformed from initial rotation
+        axis = transf_rot.Axis
+        angle = transf_rot.Angle
         revers = fp.Reversed
         enbl = fp.Enabled
         if revers:
@@ -87,8 +90,11 @@ class MotorObserver:
         else:
             App.Console.PrintWarning("Multiple axis rotation, breaking!\n")
             if auto_set_base_pl:
-                fp.BasePlacement = pl
-                App.Console.PrintMessage("Base placement adjusted automatically\n")
+                if (fp.SupportObject):
+                    fp.BaseRotation = fp.SupportObject.Placement.Rotation.inverted() * fp.Placement.Rotation
+                else:
+                    fp.BaseRotation = rot
+                App.Console.PrintMessage("Base rotation adjusted automatically\n")
             return
         fp.TransfAngle = str (angle) + 'rad'
         w = 10
@@ -96,9 +102,14 @@ class MotorObserver:
         h = 3
         fp.Shape = Part.makeBox(w, l, h, App.Vector(-w / 2, -l / 2, -h / 2))
 
-# above class must be defined (pasted in the interpreter) before opening a file with motorobserver addObject
-# otherwise will throw pyException: <string>(2)<class 'AttributeError'>: Module __main__ has no class MotorObserver
 
+# ***************************************************************************
+# * Above class must be defined (pasted in the interpreter) before opening  *
+# * a file with motorobserver object                                        *
+# * Otherwise will throw pyException: <string>(2)<class 'AttributeError'>:  *
+# * Module __main__ has no class MotorObserver                              *
+# * The code below can be pasted later.                                     *
+# ***************************************************************************
 
 def create_observer():
     obs_count = len(App.ActiveDocument.findObjects(Label="MotorObserver"))
@@ -108,13 +119,15 @@ def create_observer():
     obs.recompute()
 
 
-def set_base_pl(): #set base placement, used to calculate diff angle
+# set_base_pl should be used for setting initial rotations of observers
+# this is required after creation of an observer, or support object change
+def set_base_pl(): # set base placement, used to calculate diff angle
     observers = App.ActiveDocument.findObjects(Label="MotorObserver")
     for obs in observers:
-        if obs.SupportObject:
-            obs.BasePlacement = obs.Placement * obs.SupportObject.Placement
+        if (obs.SupportObject):
+            obs.BaseRotation = obs.SupportObject.Placement.Rotation.inverted() * obs.Placement.Rotation
         else:
-            obs.BasePlacement = obs.Placement
+            obs.BaseRotation = obs.Placement.Rotation
         obs.recompute()
 
 timer_sender = QtCore.QTimer()
@@ -134,7 +147,7 @@ def send_states():
             states_for_send.append(state)
         else:
             App.Console.PrintError(str(obs.Label) + "not added, max 3 motors per group allowed!\n")
-        print (obs.Label, state)
+        App.Console.PrintMessage(str(obs.Label) + " " + str(state) + "\n")
     while len(states_for_send) < 3:
         iden = len(states_for_send)
         states_for_send.append([False, 0.0])
@@ -155,6 +168,7 @@ def send_states_udp(states_for_send):
 
 timer_sender.timeout.connect(send_states)
 
+# the timer gives all observers some time to update attributes, before reading them
 def trigger_sender():
     if (timer_finished):
         timer_sender.start()
