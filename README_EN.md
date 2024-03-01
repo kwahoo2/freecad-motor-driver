@@ -41,15 +41,15 @@ The content of the repository is divided into 3 parts, located in the following 
 
 `make`
 
-* Download [Ondsel ES](https://github.com/Ondsel-Development/FreeCAD/releases) (FreeCAD version with unified assembly workbench implemented) and execute it.
-After starting, paste the contents of the `motor-observer.py` script into the Python console and **then** open the `deltarobot-example.FCStd` example.
+* Download [FreeCAD weekly build](https://github.com/FreeCAD/FreeCAD-Bundle/releases/tag/weekly-builds) or [Ondsel ES](https://github.com/Ondsel-Development/FreeCAD/releases) and execute it.
+After starting, paste the contents of the `motor-observer.py` script into the Python console and **then** open the `deltarobot-example.FCStd` or `3axis_robot.FCStd` example.
 Note: if you are running FreeCAD on a remote computer, adjust the line `default_remote = '192.168.1.23'` in the `motor-observer.py` script by entering the IP address of the Raspberry Pi there. You can also change the address after the script starts by typing `adr='192.168.XXX.XXX` in the interpreter.
 
 * Run the motor driver application on the Raspberry Pi (requires superuser rights due to GPIO access):
 
 `sudo ./udp-receiver`
 
-* Move the assembly with the mouse, after activating it by double-clicking on the `deltabot` assembly in the feature tree. In the Ondsel/FreeCAD report view, you should see something similar to:
+* Move the assembly with the mouse, after activating it by double-clicking on the `deltabot` / `3axis_robot` assembly in the feature tree. In the Ondsel/FreeCAD report view, you should see something similar to:
 
 ```
 15:53:03  MotorObserver0 [True, 8.391769606205315]
@@ -118,6 +118,14 @@ After rotating the object, you should see the _Transf Angle_ attribute change an
 ![Single Observer][so]
 
 [so]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/single_observer.png "Observer"
+
+
+If the MotorObserver is moving in the 3D space, it needs a support object specified. Eg.: if MotorObserver is fixed to a motor pulley, the motor housing can used as the support object. An user can set the support in the data tab inside the FreeCAD window.The script uses the support object and MotorObserver object rotations to calculate the relative angle between them.
+
+
+![Support Object][sp]
+
+[sp]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/support.png "Support object"
 
 ## Saving the script as a macro
 

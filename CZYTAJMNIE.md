@@ -42,15 +42,15 @@ Zawartość repozytorium podzielona jest na 3 części, znajdujące się w poni�
 
 `make`
 
-* Pobierz [Ondsel ES](https://github.com/Ondsel-Development/FreeCAD/releases) (wersja FreeCAD z zaimplementowanym zunifikowanym środowiskiem złożeń) i uruchom go.
-Po uruchomieniu wklej do konsoli Pythona zawartość skryptu `motor-observer.py` a **następnie** otwórz przykład `deltarobot-example.FCStd`
+* Pobierz [FreeCAD weekly build](https://github.com/FreeCAD/FreeCAD-Bundle/releases/tag/weekly-builds) lub [Ondsel ES](https://github.com/Ondsel-Development/FreeCAD/releases) i uruchom go.
+Po uruchomieniu wklej do konsoli Pythona zawartość skryptu `motor-observer.py` a **następnie** otwórz przykład `deltarobot-example.FCStd` lub `3axis_robot.FCStd`.
 Uwaga: jeśli uruchamiasz FreeCAD na zdalnym komputerze, dostosuj linię `default_remote = '192.168.1.23'` w skrypcie `motor-observer.py`, wpisując tam adress IP Raspberry Pi. Adres możesz też zmienić po starcie skryptu, wpisując w interpreter `adr='192.168.XXX.XXX`.
 
 * Uruchom aplikację sterownika silników na Raspberry Pi (wymaga praw superużytkownika ze względu na dostęp do GPIO):
 
 `sudo ./udp-receiver`
 
-* Porusz złożeniem za pomocą myszy, po uprzednim aktywowaniu go przez podwójne kliknięcie na złożenie `deltabot` w drzewie cech. W widoku raportu Ondsel/FreeCAD powienieneś zobaczyć coś podobnego do:
+* Porusz złożeniem za pomocą myszy, po uprzednim aktywowaniu go przez podwójne kliknięcie na złożenie `deltabot` / `3axis_robot` w drzewie cech. W widoku raportu Ondsel/FreeCAD powienieneś zobaczyć coś podobnego do:
 
 ```
 15:53:03  MotorObserver0 [True, 8.391769606205315]
@@ -120,6 +120,13 @@ W podobny sposób możesz dodać dwa kolejne obiekty.
 ![Single Observer][so]
 
 [so]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/single_observer.png "Observer"
+
+Jeśli MotorObserver porusza się w przestrzeni 3D, wymaga określenia obiektu bazowego (Support). Np.: jeśli MotorObserver jest przymocowany do koła pasowego silnika, obudowę silnika można wykorzystać jako obiekt bazowy. Użytkownik może ustawić podporę na karcie danych w oknie FreeCAD. Skrypt wykorzystuje rotację obiektu bazowego i obiektu MotorObserver do obliczenia względnego kąta między nimi.
+
+
+![Support Object][sp]
+
+[sp]: https://raw.githubusercontent.com/kwahoo2/freecad-motor-driver/main/.github/images/support.png "Support object"
 
 ## Zapisanie skryptu jako makra
 
