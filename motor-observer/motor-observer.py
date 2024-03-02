@@ -53,10 +53,38 @@ class MotorObserver:
             App.Console.PrintMessage(str(fp.Label) + " Support: " + str(fp.SupportObject.Label) + "\n")
 
         if (prop == "Placement") or (prop == "Enabled"):
-            fp.recompute()
+            auto_set_base_pl = False
+            rot = fp.Placement.Rotation
+            base_rot = fp.BaseRotation
+            # if the observer is moving in 3D space it need a support object specified
+            # eg.: if observer is fixed to a motor pulley, the motor housing can used as a support object
+            # an user can set the support in the data tab inside FreeCAD window
+            if (fp.SupportObject):
+                support_rot = fp.SupportObject.Placement.Rotation
+                transf_rot = base_rot.inverted() * support_rot.inverted() * rot
+            else:
+                transf_rot = base_rot.inverted() * rot # calculate how much rotation is transformed from initial rotation
+            axis = transf_rot.Axis
+            angle = transf_rot.Angle
+            revers = fp.Reversed
             enbl = fp.Enabled
-            angle = fp.TransfAngle.Value
-            state = [bool(enbl), float(angle)]
+            if revers:
+                angle = 2 * math.pi - angle
+            if (axis.x > 0.99 or axis.y > 0.99 or axis.z > 0.99):
+                pass
+            elif (axis.x < -0.99 or axis.y < -0.99 or axis.z < -0.99): # reverse angle if axis -1
+                angle = 2 * math.pi - angle
+            else:
+                App.Console.PrintWarning("Multiple axis rotation, breaking!\n")
+                if auto_set_base_pl:
+                    if (fp.SupportObject):
+                        fp.BaseRotation = fp.SupportObject.Placement.Rotation.inverted() * fp.Placement.Rotation
+                    else:
+                        fp.BaseRotation = rot
+                    App.Console.PrintMessage("Base rotation adjusted automatically\n")
+                return
+            fp.TransfAngle = str (angle) + 'rad'
+            state = [bool(enbl), float(fp.TransfAngle.Value)]
             if (self.last_state == state):
                 App.Console.PrintMessage("State not changed, pass\n")
             else:
@@ -66,37 +94,6 @@ class MotorObserver:
                     App.Console.PrintMessage("No send_states() function defined!\n")
 
     def execute(self, fp):
-        auto_set_base_pl = False
-        rot = fp.Placement.Rotation
-        base_rot = fp.BaseRotation
-        # if the observer is moving in 3D space it need a support object specified
-        # eg.: if observer is fixed to a motor pulley, the motor housing can used as a support object
-        # an user can set the support in the data tab inside FreeCAD window
-        if (fp.SupportObject):
-            support_rot = fp.SupportObject.Placement.Rotation
-            transf_rot = base_rot.inverted() * support_rot.inverted() * rot
-        else:
-            transf_rot = base_rot.inverted() * rot # calculate how much rotation is transformed from initial rotation
-        axis = transf_rot.Axis
-        angle = transf_rot.Angle
-        revers = fp.Reversed
-        enbl = fp.Enabled
-        if revers:
-            angle = 2 * math.pi - angle
-        if (axis.x > 0.99 or axis.y > 0.99 or axis.z > 0.99):
-            pass
-        elif (axis.x < -0.99 or axis.y < -0.99 or axis.z < -0.99): # reverse angle if axis -1
-            angle = 2 * math.pi - angle
-        else:
-            App.Console.PrintWarning("Multiple axis rotation, breaking!\n")
-            if auto_set_base_pl:
-                if (fp.SupportObject):
-                    fp.BaseRotation = fp.SupportObject.Placement.Rotation.inverted() * fp.Placement.Rotation
-                else:
-                    fp.BaseRotation = rot
-                App.Console.PrintMessage("Base rotation adjusted automatically\n")
-            return
-        fp.TransfAngle = str (angle) + 'rad'
         w = 10
         l = 7
         h = 3
