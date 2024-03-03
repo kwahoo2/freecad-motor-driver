@@ -44,14 +44,13 @@ class MotorObserver:
         obj.addProperty("App::PropertyBool","Enabled","MotorObserver","Enable the motor").Enabled = True
         obj.addProperty("App::PropertyBool","Reversed","MotorObserver","Reverse motor direction").Reversed = False
         obj.setEditorMode("TransfAngle", 1) # this property should be read only
-
         obj.Proxy = self
         self.last_state = []
 
     def onChanged(self, fp, prop):
         if (prop == "SupportObject"):
-            App.Console.PrintMessage(str(fp.Label) + " Support: " + str(fp.SupportObject.Label) + "\n")
-
+            if (fp.SupportObject):
+                App.Console.PrintMessage(str(fp.Label) + " Support: " + str(fp.SupportObject.Label) + "\n")
         if (prop == "Placement") or (prop == "Enabled"):
             auto_set_base_pl = False
             rot = fp.Placement.Rotation
