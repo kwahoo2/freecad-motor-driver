@@ -1,6 +1,12 @@
 # FreeCAD stepper motors driver
 
-Check the video below:
+Check the videos below:
+
+3 axis arm example - adding MotorObservers:
+
+[![Adding MotorObservers in FreeCAD](https://img.youtube.com/vi/rpdGaC512gk/0.jpg)](https://youtu.be/rpdGaC512gk)
+
+Delta robot example:
 
 [![MotorObservers in FreeCAD](https://img.youtube.com/vi/pOclEe01pYs/0.jpg)](https://youtu.be/pOclEe01pYs)
 
